@@ -1,0 +1,12 @@
+Send code by mail
+wait 5 minutes
+while (time's not up) {
+	on.("/auth", () => {
+		if (auth good)
+			give roles
+			send welcome msg with user_info ?
+		else
+			send(Try again!)
+	})
+}
+send(Your time's up <user>, plz try /check again)
