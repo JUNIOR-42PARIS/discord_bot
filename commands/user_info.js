@@ -83,7 +83,7 @@ module.exports = {
 							inline: true,
 						},
 						{
-							name: "BlackHoled at",
+							name: "Black Hole absorption",
 							value: moment(cursus.blackholed_at).format("MMMM Do YYYY"),
 							inline: true,
 						}
