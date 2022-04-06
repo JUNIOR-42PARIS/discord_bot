@@ -41,7 +41,7 @@ module.exports = {
 						url: user.url,
 					})
 					.setTitle(`${user.login}'s infos`)
-					.setURL(user.url)
+					.setURL("https://profile.intra.42.fr/users/" + user.login)
 					.setThumbnail(user.image_url)
 					.setFooter({
 						text: `Asked by ${member.displayName}`,
