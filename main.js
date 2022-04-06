@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const fs = require("node:fs");
 const { Client, Collection, Intents } = require("discord.js");
-const { log } = require("node:console");
+const { deploy_commands } = require("./deploy-commands");
 
 const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -53,7 +53,6 @@ client.on("messageCreate", async (msg) => {
 	}
 	if (!msg.member.permissions.has("ADMINISTRATOR")) return;
 	if (msg.content === "lld.deploy") {
-		const { deploy_commands } = require("./deploy-commands");
 		deploy_commands();
 		msg.reply("Commands deployed!");
 	}
