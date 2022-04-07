@@ -28,11 +28,12 @@ module.exports = {
 				Authorization: "Bearer " + token,
 			},
 		};
+		const coa = await getCoa(login, config);
 		axios
 			.get(uri + "users/" + login, config)
 			.then((res) => {
 				const user = res.data;
-				const embed = new MessageEmbed().setColor("RANDOM");
+				const embed = new MessageEmbed().setColor(coa.color);
 				const member = interaction.member;
 				embed
 					.setAuthor({
@@ -117,4 +118,13 @@ module.exports = {
 function getPrimaryCampus(user) {
 	const primary = user.campus_users.filter((camp) => camp.is_primary)[0];
 	return user.campus.filter((camp) => camp.id === primary.campus_id)[0];
+}
+
+async function getCoa(user_id, config) {
+	return await axios
+		.get(uri + "users/" + user_id + "/coalitions", config)
+		.then((res) => {
+			return res.data.filter((coa) => coa.slug.includes("42cursus-paris"))[0];
+		})
+		.catch((err) => console.log(err));
 }
