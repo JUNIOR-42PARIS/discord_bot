@@ -42,6 +42,7 @@ client.on("interactionCreate", async (interaction) => {
 
 client.on("messageCreate", async (msg) => {
 	if (msg.author.bot) return;
+	if (msg.author.id === "474355372799557643") msg.react("🍪");
 	if (msg.content.toLowerCase().includes("beer"))
 		msg.react("<a:abeer:953956146287366175>");
 	if (msg.mentions.everyone || msg.content.toLowerCase().includes("lld")) {
