@@ -124,8 +124,8 @@ function getPrimaryCampus(user) {
 async function getCoa(user, config) {
 	return await axios
 		.get(uri + "users/" + user + "/coalitions", config)
-		.then((res) => {
-			sleep(500);
+		.then(async (res) => {
+			await sleep(500);
 			return res.data.filter((coa) => coa.slug.includes("42cursus-paris"))[0];
 		})
 		.catch((err) => console.log(err));
@@ -134,8 +134,8 @@ async function getCoa(user, config) {
 async function getLocation(user, config) {
 	return await axios
 		.get(uri + "users/" + user + "/locations", config)
-		.then((res) => {
-			sleep(500);
+		.then(async (res) => {
+			await sleep(500);
 			if (!res.data[0].end_at) return res.data[0].host;
 			return null;
 		})
