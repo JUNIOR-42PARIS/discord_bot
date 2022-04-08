@@ -4,7 +4,7 @@
 	"description": "simple auth discord bot for 42 BDE",
 	"main": "main.js",
 	"scripts": {
-		"dev": "nodemon .",
+		"test": "nodemon .",
 		"start": "node ."
 	},
 	"author": "shocquen",
