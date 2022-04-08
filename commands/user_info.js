@@ -28,13 +28,14 @@ module.exports = {
 				Authorization: "Bearer " + token,
 			},
 		};
-		const { color } = await getCoa(login, config);
+		const coa = await getCoa(login, config);
+		const color = coa ? coa.color : null;
 		const location = await getLocation(login, config);
 		axios
 			.get(uri + "users/" + login, config)
 			.then((res) => {
 				const user = res.data;
-				const embed = new MessageEmbed().setColor(color);
+				const embed = new MessageEmbed().setColor(color || "RANDOM");
 				const member = interaction.member;
 				embed
 					.setAuthor({
@@ -114,8 +115,6 @@ module.exports = {
 	},
 };
 
-// todo : 2 req API 42 / sec dépassés => go timout entre chaques
-
 function getPrimaryCampus(user) {
 	const primary = user.campus_users.filter((camp) => camp.is_primary)[0];
 	return user.campus.filter((camp) => camp.id === primary.campus_id)[0];
@@ -140,4 +139,13 @@ async function getLocation(user, config) {
 			return null;
 		})
 		.catch((err) => console.log(err));
+}
+
+async function ask42(path, config) {
+	return await axios
+		.get(url, config)
+		.then((res) => {
+			return res.data;
+		})
+		.catch((err) => console.error(err));
 }
