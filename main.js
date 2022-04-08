@@ -54,8 +54,8 @@ client.on("messageCreate", async (msg) => {
 	}
 	if (!msg.member.permissions.has("ADMINISTRATOR")) return;
 	if (msg.content === "lld.deploy") {
-		deploy_commands();
-		msg.reply("Commands deployed!");
+		deploy_commands(msg.guild.id);
+		msg.reply(`Commands deployed on ${msg.guild.name}!`);
 	}
 });
 
