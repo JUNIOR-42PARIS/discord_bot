@@ -34,4 +34,5 @@ module.exports = {
 
 		return token;
 	},
+	sleep: (ms) => new Promise((res) => setTimeout(res, ms)),
 };
