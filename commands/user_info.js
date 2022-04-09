@@ -30,13 +30,12 @@ module.exports = {
 		};
 		const coa = await getCoa(login, config);
 		const color = coa ? coa.color : null;
-		const location = await getLocation(login, config);
+		// const location = await getLocation(login, config);
 		axios
 			.get(uri + "users/" + login, config)
-			.then((res) => {
+			.then(async (res) => {
 				const user = res.data;
 				const embed = new MessageEmbed().setColor(color || "RANDOM");
-				const member = interaction.member;
 				embed
 					.setAuthor({
 						name: user.login,
@@ -103,9 +102,13 @@ module.exports = {
 					);
 					embed.addField("titles", titles.join("\n"), true);
 				}
-				if (location) embed.addField("Location", location, true);
+				if (user.location) embed.addField("Location", user.location, true);
 
-				interaction.reply({ embeds: [embed] });
+				try {
+					await interaction.reply({ embeds: [embed] });
+				} catch (err) {
+					console.error(err);
+				}
 			})
 			.catch((err) => {
 				if (err.response) console.log("status " + err.response.status);
@@ -126,17 +129,6 @@ async function getCoa(user, config) {
 		.then(async (res) => {
 			await sleep(500);
 			return res.data.filter((coa) => coa.slug.includes("42cursus-paris"))[0];
-		})
-		.catch((err) => console.log(err));
-}
-
-async function getLocation(user, config) {
-	return await axios
-		.get(uri + "users/" + user + "/locations", config)
-		.then(async (res) => {
-			await sleep(500);
-			if (!res.data[0].end_at) return res.data[0].host;
-			return null;
 		})
 		.catch((err) => console.log(err));
 }
