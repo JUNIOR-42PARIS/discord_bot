@@ -1,6 +1,6 @@
 const { stripIndents } = require("common-tags");
 const { sleep } = require("../utils.js");
-const tuteurs = "795296219370094602";
+const tuteurs = "960464388177940540";
 
 module.exports = {
 	name: "messageCreate",
