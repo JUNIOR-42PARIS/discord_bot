@@ -1,17 +1,25 @@
+const { restricted_guilds } = require("../config.json");
+
 module.exports = {
 	name: "messageCreate",
 	async execute(msg) {
 		if (msg.author.bot) return;
+		if (restricted_guilds.includes(msg.guild.id)) return;
+
+		const client = msg.client;
 
 		try {
-			if (msg.content.toLowerCase().includes("beer"))
-				await msg.react("<a:abeer:953956146287366175>");
+			if (msg.content.toLowerCase().includes("beer")) {
+				const emoji = await client.emojis.cache.find(
+					(e) => e.name === "catRoll"
+				);
+				msg.reply(emoji.toString());
+			}
 
 			if (msg.mentions.everyone || msg.content.toLowerCase().includes("lld")) {
-				const emoji =
-					msg.guildId === "498924099666575361"
-						? "<a:Coin:501037083847032842>"
-						: "<a:alld:953955942234468352>";
+				const emoji = await client.emojis.cache.find(
+					(e) => e.name === "catRoll"
+				);
 				await msg.react(emoji);
 			}
 		} catch (error) {

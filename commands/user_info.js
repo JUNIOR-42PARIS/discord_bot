@@ -40,7 +40,7 @@ module.exports = {
 					.setAuthor({
 						name: user.login,
 						iconURL: user.image_url,
-						url: user.url,
+						url: "https://profile.intra.42.fr/users/" + user.login,
 					})
 					.setTitle(`${user.login}'s infos`)
 					.setURL("https://profile.intra.42.fr/users/" + user.login)
