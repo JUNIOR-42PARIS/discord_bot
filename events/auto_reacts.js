@@ -41,7 +41,9 @@ module.exports = {
 		const client = msg.client;
 
 		try {
-			if (beers.map((b) => msg.content.toLowerCase().includes(b))) {
+			const checks = beers.map((b) => msg.content.toLowerCase().includes(b));
+
+			if (checks.includes(true)) {
 				const emoji = await client.emojis.cache.find((e) => e.name === "abeer");
 				msg.react(emoji.toString());
 			}
