@@ -1,4 +1,36 @@
 const { restricted_guilds } = require("../config.json");
+const beers = [
+	"beer",
+	"ipa",
+	"pils",
+	"bière",
+	"ale",
+	"bibine",
+	"boîte",
+	"bock",
+	"boisson",
+	"caisse",
+	"cénotaphe",
+	"cervoise",
+	"chope",
+	"faro",
+	"ginger",
+	"gueuze",
+	"guinness",
+	"kriek",
+	"lambic",
+	"litre",
+	"pale-ale",
+	"porter",
+	"saké",
+	"sépulcre",
+	"sarcophage",
+	"stout",
+	"phéno",
+	"pheno",
+	"phénos",
+	"phenos",
+];
 
 module.exports = {
 	name: "messageCreate",
@@ -9,17 +41,13 @@ module.exports = {
 		const client = msg.client;
 
 		try {
-			if (msg.content.toLowerCase().includes("beer")) {
-				const emoji = await client.emojis.cache.find(
-					(e) => e.name === "catRoll"
-				);
-				msg.reply(emoji.toString());
+			if (beers.map((b) => msg.content.toLowerCase().includes(b))) {
+				const emoji = await client.emojis.cache.find((e) => e.name === "abeer");
+				msg.react(emoji.toString());
 			}
 
 			if (msg.mentions.everyone || msg.content.toLowerCase().includes("lld")) {
-				const emoji = await client.emojis.cache.find(
-					(e) => e.name === "catRoll"
-				);
+				const emoji = await client.emojis.cache.find((e) => e.name === "lld");
 				await msg.react(emoji);
 			}
 		} catch (error) {
