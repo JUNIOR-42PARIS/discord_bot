@@ -9,6 +9,8 @@ app = Flask(__name__)
 def auto_deploy():
     p = subprocess.Popen(['git','pull'], cwd='/home/saky/lld_bot_discord')
     p.wait()
+	p = subprocess.Popen(['pm2','reload','bot_lld_sudo'], cwd='/home/saky')
+    p.wait()
     print("")
 	print("Auto deployed !")
 	print("")
