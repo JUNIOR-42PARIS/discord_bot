@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
@@ -20,7 +22,7 @@ const credentials = {
 };
 
 app.get('/auth', function (req, res) {
-    res.redirect("https://api.intra.42.fr/oauth/authorize?client_id=85572e681d846e10b545098ab236aaa69d0b8c36cbc8b026a87e71d948045fe0&redirect_uri=https%3A%2F%2Fdamien-hubleur.tech%3A2424%2F42result&response_type=code");
+    res.redirect("https://api.intra.42.fr/oauth/authorize?client_id=85572e681d846e10b545098ab236aaa69d0b8c36cbc8b026a87e71d948045fe0&redirect_uri=https%3A%2F%2Fdamien-hubleur.tech%3A2424%2F42result?user=XXX&response_type=code");
 });
 
 app.get('/42result', function (req, res) {
@@ -29,8 +31,23 @@ app.get('/42result', function (req, res) {
     else
     {
         const code = req.query.code;
-        console.log(code);
-        res.status(200).send("Bienvenue !");
+        const user = req.query.user;
+		const params = {
+            "grant_type": "authorization_code",
+            "client_id": process.env.CLIENT_ID,
+            "client_secret": process.env.CLIENT_SECRET,
+            "code": code,
+            "redirect_uri": "https://damien-hubleur.tech:2424/42result?user=" + user
+		};
+        axios
+			.post("https://api.intra.42.fr/oauth/token", params)
+			.then(async (res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                    console.log(err);
+			});
+        res.status(200).send("Bienvenue " + user + "!");
     }
 });
 
