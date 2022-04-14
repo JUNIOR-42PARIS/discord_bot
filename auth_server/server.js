@@ -4,7 +4,6 @@ const fs = require('fs');
 const https = require('https');
 const express = require('express');
 const axios = require("axios");
-const res = require("express/lib/response");
 
 const port = 2424;
 // SSL certificate server informations
