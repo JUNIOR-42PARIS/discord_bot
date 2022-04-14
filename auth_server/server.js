@@ -96,10 +96,9 @@ async function getUserInformations(token, user_res, user_code)
     axios
     .get("https://api.intra.42.fr/v2/me", config)
     .then(async (res) => {
-        const login = res.data.login;
-        console.log(login + " logged !");
+        console.log(res.data.login + " logged !");
         const found = store.find(o => o.code === user_code);
-        validateAuth(found.code, login);
+        validateAuth(found.code, res.data);
         store.splice(found, 1);
         user_res.status(200).send("Bienvenue " + login + "!");
     })

@@ -43,7 +43,7 @@ module.exports = {
 		const url = "https://damien-hubleur.tech:2424/auth?user_code=" + code;
 		return url;
 	},
-	validateAuth: (discordUserId, login) => {
+	validateAuth: (discordUserId, user) => {
 		// Saky
 		// Return rien
 	}
