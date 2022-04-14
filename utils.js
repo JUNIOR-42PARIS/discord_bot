@@ -3,6 +3,8 @@ const axios = require("axios");
 const { log } = require("node:console");
 const querystring = require("node:querystring");
 
+const { generateUniqueCode, addToStore } = require("auth_server/server.js");
+
 module.exports = {
 	getToken: async () => {
 		const headersList = {
@@ -36,8 +38,10 @@ module.exports = {
 	},
 	sleep: (ms) => new Promise((res) => setTimeout(res, ms)),
 	initAuth: (discordUserId) => {
-		// Damien
-		// Return URL pour l utilisateur
+		const code = generateUniqueCode();
+		addToStore(code, discordUserId);
+		const url = "https://damien-hubleur.tech:2424/auth?user_code=" + code;
+		return url;
 	},
 	validateAuth: (discordUserId, login) => {
 		// Saky

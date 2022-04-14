@@ -5,6 +5,8 @@ const https = require('https');
 const express = require('express');
 const axios = require("axios");
 
+const { validateAuth } = require("../utils.js");
+
 const port = 2424;
 // SSL certificate server informations
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/damien-hubleur.tech/privkey.pem', 'utf8');
@@ -16,14 +18,32 @@ const credentials = {
 	ca: ca
 };
 
-var app = express();
+let app = express();
+
+let store = [];
+
+function generateUniqueCode()
+{
+    const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for ( let i = 0; i < 5; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+}
+
+function addToStore(user_code, user_id)
+{
+    store.push({"id": user_id, "code": user_code});
+}
 
 // The endpoint for the auth. Need to pass a unique code with /auth?user=XXX
 // Use the XXX in the redirect uri
 app.get('/auth', function (req, res)
 {
     const user_code = req.query.user_code;
-    if(!user_code)
+    const found = store.find(o => o.code === user_code);
+    if(!user_code || !found)
         res.status(400).send("Désolé, nous n'avons pas pu récupérer ton code unique !");
     else
         res.redirect("https://api.intra.42.fr/oauth/authorize?client_id=85572e681d846e10b545098ab236aaa69d0b8c36cbc8b026a87e71d948045fe0&redirect_uri=https%3A%2F%2Fdamien-hubleur.tech%3A2424%2F42result?user_code=" + user_code + "&response_type=code");
@@ -42,6 +62,9 @@ app.get('/42result', function (req, user_res)
     {
         const code = req.query.code;
         const user_code = req.query.user_code;
+        const found = store.find(o => o.code === user_code);
+        if(!found)
+            user_res.status(400).send("Désolé, nous n'avons pas pu récupérer ton code unique !");
 		const params = {
             "grant_type": "authorization_code",
             "client_id": process.env.CLIENT_ID,
@@ -52,7 +75,7 @@ app.get('/42result', function (req, user_res)
         axios
 		.post("https://api.intra.42.fr/oauth/token", params)
 		.then(async (res) => {
-            await getUserInformations(res.data.access_token, user_res)
+            await getUserInformations(res.data.access_token, user_res, user_code)
         })
         .catch((err) => {
             console.error("Impossible to transform user's code into token:");
@@ -63,7 +86,7 @@ app.get('/42result', function (req, user_res)
 });
 
 // Function that take the token and try to get user's informations from it
-async function getUserInformations(token, user_res)
+async function getUserInformations(token, user_res, user_code)
 {
     const config = {
         headers: {
@@ -74,7 +97,10 @@ async function getUserInformations(token, user_res)
     .get("https://api.intra.42.fr/v2/me", config)
     .then(async (res) => {
         const login = res.data.login;
-        console.log(login + " logged !")
+        console.log(login + " logged !");
+        const found = store.find(o => o.code === user_code);
+        validateAuth(found.code, login);
+        store.splice(found, 1);
         user_res.status(200).send("Bienvenue " + login + "!");
     })
     .catch((err) => {
@@ -89,3 +115,5 @@ const httpsServer = https.createServer(credentials, app);
 httpsServer.listen(port, () => {
 	console.log('Server running on port ' + port);
 });
+
+module.exports = {generateUniqueCode, addToStore};
