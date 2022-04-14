@@ -35,4 +35,12 @@ module.exports = {
 		return token;
 	},
 	sleep: (ms) => new Promise((res) => setTimeout(res, ms)),
+	initAuth: (discordUserId) => {
+		// Damien
+		// Return URL pour l utilisateur
+	},
+	validateAuth: (discordUserId, login) => {
+		// Saky
+		// Return rien
+	}
 };
