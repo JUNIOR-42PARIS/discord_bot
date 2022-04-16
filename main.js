@@ -4,7 +4,11 @@ const fs = require("node:fs");
 const { Client, Collection, Intents } = require("discord.js");
 
 const client = new Client({
-	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+	intents: [
+		Intents.FLAGS.GUILDS,
+		Intents.FLAGS.GUILD_MESSAGES,
+		Intents.FLAGS.GUILD_MEMBERS,
+	],
 });
 
 client.commands = new Collection();
@@ -31,3 +35,5 @@ for (const file of eventFiles) {
 }
 
 client.login(process.env.TOKEN);
+
+exports.client = client;

@@ -1,5 +1,5 @@
 const { restricted_guilds } = require("../config.json");
-const beers = [
+const keywords = [
 	"beer",
 	"ipa",
 	"pils",
@@ -41,7 +41,9 @@ module.exports = {
 		const client = msg.client;
 
 		try {
-			const checks = beers.map((b) => msg.content.toLowerCase().includes(b));
+			const checks = keywords.map((b) =>
+				msg.content.toLowerCase().split(" ").includes(b)
+			);
 
 			if (checks.includes(true)) {
 				const emoji = await client.emojis.cache.find((e) => e.name === "abeer");
