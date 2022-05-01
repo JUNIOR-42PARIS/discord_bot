@@ -4,7 +4,7 @@ const { log } = require("node:console");
 const querystring = require("node:querystring");
 const { client } = require("./main.js");
 
-const { generateUniqueCode, addToStore } = require("auth_server/server.js");
+const { generateUniqueCode, addToStore } = require("./auth_server/server");
 
 module.exports = {
 	getToken: async () => {

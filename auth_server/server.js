@@ -1,7 +1,6 @@
 require("dotenv").config();
 
 const fs = require('fs');
-const https = require('https');
 const express = require('express');
 const axios = require("axios");
 
@@ -108,4 +107,4 @@ async function getUserInformations(token, user_res, user_code)
     });
 }
 
-module.exports = {generateUniqueCode, addToStore, credentials, app};
+module.exports = { generateUniqueCode, addToStore, credentials, app };
