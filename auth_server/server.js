@@ -7,7 +7,6 @@ const axios = require("axios");
 
 const { validateAuth } = require("../utils.js");
 
-const port = 2424;
 // SSL certificate server informations
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/damien-hubleur.tech/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('/etc/letsencrypt/live/damien-hubleur.tech/cert.pem', 'utf8');
@@ -109,10 +108,4 @@ async function getUserInformations(token, user_res, user_code)
     });
 }
 
-// Creation of the https server
-const httpsServer = https.createServer(credentials, app);
-httpsServer.listen(port, () => {
-	console.log('Server running on port ' + port);
-});
-
-module.exports = {generateUniqueCode, addToStore};
+module.exports = {generateUniqueCode, addToStore, credentials, app};

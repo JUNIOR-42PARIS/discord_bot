@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const fs = require("node:fs");
 const { Client, Collection, Intents } = require("discord.js");
+const { credentials, app} = require("auth_server/server.js")
 
 const client = new Client({
 	intents: [
@@ -33,6 +34,12 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+const port = 2424;
+const httpsServer = https.createServer(credentials, app);
+httpsServer.listen(port, () => {
+	console.log('Server running on port ' + port);
+});
 
 client.login(process.env.TOKEN);
 
