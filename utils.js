@@ -1,10 +1,10 @@
 require("dotenv").config();
 const axios = require("axios");
-const { log } = require("node:console");
 const querystring = require("node:querystring");
-const { client } = require("./main.js");
+// const { client } = require("./main.js");
+const { readFileSync, writeFileSync } = require("node:fs");
 
-const { generateUniqueCode, addToStore } = require("./auth_server/server");
+// const { addToStore } = require("./auth_server/server");
 
 module.exports = {
 	getToken: async () => {
@@ -38,12 +38,6 @@ module.exports = {
 		return token;
 	},
 	sleep: (ms) => new Promise((res) => setTimeout(res, ms)),
-	initAuth: (discordUserId) => {
-		const code = generateUniqueCode();
-		addToStore(code, discordUserId);
-		const url = "https://damien-hubleur.tech:2424/auth?user_code=" + code;
-		return url;
-	},
 	validateAuth: async (discordUserId, user) => {
 		//todo: const groups = user.groups
 		//todo: Tuteur ? Staff ? Bocal ?
@@ -59,6 +53,29 @@ module.exports = {
 			await member.setNickname(`${user.first_name} (${user.login})`);
 			if (bocal) await member.roles.add("960464782132142151");
 			if (tuteur) await member.roles.add("960464388177940540");
+		} catch (err) {
+			console.error(err);
+		}
+	},
+	readDB: (path) => {
+		try {
+			const db = readFileSync(path);
+			return JSON.parse(db);
+		} catch (err) {
+			console.error(err);
+			return undefined;
+		}
+	},
+	writeDB: (path, data) => {
+		try {
+			writeFileSync(path, JSON.stringify(data));
+		} catch (err) {
+			console.error(err);
+		}
+	},
+	clearDB: (path) => {
+		try {
+			writeFileSync(path, JSON.stringify([]));
 		} catch (err) {
 			console.error(err);
 		}
