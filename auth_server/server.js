@@ -75,6 +75,7 @@ async function validateAuth(discordUserId, user, client) {
 		if (bocal) await member.roles.add("960464782132142151");
 		if (tuteur) await member.roles.add("960464388177940540");
 		await member.roles.add("954063445634985984");
+		console.log(`${user.login} is set up`);
 	} catch (err) {
 		console.error(err);
 	}
@@ -92,7 +93,9 @@ function startApp(client) {
 		if (!user_code || !found)
 			res
 				.status(400)
-				.send("Désolé, nous n'avons pas pu récupérer ton code unique !");
+				.send(
+					"Désolé, nous n'avons pas pu récupérer ton code unique ! https://s.42l.fr/results"
+				);
 		else
 			res.redirect(
 				"https://api.intra.42.fr/oauth/authorize?client_id=85572e681d846e10b545098ab236aaa69d0b8c36cbc8b026a87e71d948045fe0&redirect_uri=https%3A%2F%2Fdamien-hubleur.tech%3A2424%2F42result?user_code=" +
@@ -115,7 +118,9 @@ function startApp(client) {
 			if (!found)
 				user_res
 					.status(400)
-					.send("Désolé, nous n'avons pas pu récupérer ton code unique !");
+					.send(
+						"Désolé, nous n'avons pas pu récupérer ton code unique ! https://s.42l.fr/results"
+					);
 			const params = {
 				grant_type: "authorization_code",
 				client_id: process.env.CLIENT_ID,
@@ -139,7 +144,9 @@ function startApp(client) {
 					console.log(err);
 					user_res
 						.status(400)
-						.send("Désolé, nous n'avons pas pu récupérer tes informations");
+						.send(
+							"Désolé, nous n'avons pas pu récupérer tes informations : https://s.42l.fr/results"
+						);
 				});
 		}
 	});
