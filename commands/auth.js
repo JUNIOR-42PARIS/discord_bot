@@ -17,8 +17,8 @@ module.exports = {
 				iconURL: client.user.avatarURL(),
 			})
 			.setThumbnail(client.user.avatarURL())
-			.setTitle("Code")
-			.setDescription(url)
+			.setTitle("Authentifie toi")
+			.setDescription(`Clique [ici](${url}) pour t'authentifier`)
 			.setFooter({
 				text: `</> with ❤ for LLD BDE 42 by Shocquen and Dhubleur`,
 			});
