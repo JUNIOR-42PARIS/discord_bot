@@ -109,7 +109,11 @@ function startApp(client) {
 	app.get("/42result", function (req, user_res) {
 		if (req.query.error || !req.query.code || !req.query.user_code) {
 			console.error("Error occured during auth");
-			user_res.status(400).send("Désolé, nous n'avons pas pu t'identifier !");
+			user_res
+				.status(400)
+				.send(
+					"Désolé, nous n'avons pas pu t'identifier ! https://s.42l.fr/results"
+				);
 		} else {
 			const db = readDB("./auth_server/users.json");
 			const code = req.query.code;
