@@ -33,7 +33,7 @@ module.exports = {
 						client.commands.map((c) => `\`/${c.data.name}\``).join("\n"),
 					].join("\n")
 				)
-				.setFooter({ text: `</> with ❤ for LLD BDE 42 by Shocquen` });
+				.setFooter({ text: `</> with ❤ for LLD BDE 42 by Shocquen and Dhubleur` });
 
 			try {
 				interaction.reply({ embeds: [data] });
