@@ -71,7 +71,9 @@ async function validateAuth(discordUserId, user, client) {
 	const tuteur = user.groups.find((g) => g.id == 40);
 
 	try {
-		await member.setNickname(`${user.first_name} (${user.login})`);
+		await member.setNickname(
+			`${user.usual_first_name || user.first_name} (${user.login})`
+		);
 		if (bocal) await member.roles.add("960464782132142151");
 		if (tuteur) await member.roles.add("960464388177940540");
 		await member.roles.add("954063445634985984");
