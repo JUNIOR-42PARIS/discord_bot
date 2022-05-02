@@ -24,7 +24,8 @@ module.exports = {
 			Animations, événements et bonne ambiance sont nos objectifs.
 		`
 			)
-			.setFooter({ text: `</> with ❤ for LLD BDE 42 by Shocquen` });
+			.addField("Source code", "https://github.com/shocquen/lld_bot_discord")
+			.setFooter({ text: `</> with ❤ for LLD BDE 42 by Shocquen & Dhubleur` });
 		const guild = await client.guilds.fetch("953954460047147008");
 		await guild.members.fetch();
 
@@ -52,5 +53,3 @@ module.exports = {
 		interaction.reply({ embeds: [data] });
 	},
 };
-
-// async function

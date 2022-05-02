@@ -51,7 +51,7 @@ module.exports = {
 			}
 
 			if (msg.mentions.everyone || msg.content.toLowerCase().includes("lld")) {
-				const emoji = await client.emojis.cache.find((e) => e.name === "lld");
+				const emoji = await client.emojis.cache.find((e) => e.name === "alld");
 				await msg.react(emoji);
 			}
 		} catch (error) {
