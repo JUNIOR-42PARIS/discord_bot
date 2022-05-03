@@ -1,36 +1,11 @@
 require("dotenv").config();
 
-const fs = require("fs");
 const express = require("express");
 const axios = require("axios");
-const https = require("https");
+const http = require("http");
 
 const { readDB, writeDB } = require("../utils.js");
 const { guildId } = require("../config.json");
-
-var credentials;
-// SSL certificate server informations
-try {
-	const privateKey = fs.readFileSync(
-		"/etc/letsencrypt/live/damien-hubleur.tech/privkey.pem",
-		"utf8"
-	);
-	const certificate = fs.readFileSync(
-		"/etc/letsencrypt/live/damien-hubleur.tech/cert.pem",
-		"utf8"
-	);
-	const ca = fs.readFileSync(
-		"/etc/letsencrypt/live/damien-hubleur.tech/chain.pem",
-		"utf8"
-	);
-	credentials = {
-		key: privateKey,
-		cert: certificate,
-		ca: ca,
-	};
-} catch (err) {
-	console.error(err);
-}
 
 // Function that take the token and try to get user's informations from it
 async function getUserInformations(token, user_res, user_code, client) {
@@ -88,7 +63,7 @@ function startApp(client) {
 
 	// The endpoint for the auth. Need to pass a unique code with /auth?user=XXX
 	// Use the XXX in the redirect uri
-	app.get("/auth", function (req, res) {
+	app.get("/", function (req, res) {
 		const db = readDB("./auth_server/users.json");
 		const user_code = req.query.user_code;
 		const found = db.some((o) => o.code === user_code);
@@ -100,7 +75,7 @@ function startApp(client) {
 				);
 		else
 			res.redirect(
-				"https://api.intra.42.fr/oauth/authorize?client_id=85572e681d846e10b545098ab236aaa69d0b8c36cbc8b026a87e71d948045fe0&redirect_uri=https%3A%2F%2Fdamien-hubleur.tech%3A2424%2F42result?user_code=" +
+				"https://api.intra.42.fr/oauth/authorize?client_id=85572e681d846e10b545098ab236aaa69d0b8c36cbc8b026a87e71d948045fe0&redirect_uri=https%3A%2F%2Fauth.damien-hubleur.tech%2F42result?user_code=" +
 					user_code +
 					"&response_type=code"
 			);
@@ -133,7 +108,7 @@ function startApp(client) {
 				client_secret: process.env.CLIENT_SECRET,
 				code: code,
 				redirect_uri:
-					"https://damien-hubleur.tech:2424/42result?user_code=" + user_code,
+					"https://auth.damien-hubleur.tech/42result?user_code=" + user_code,
 			};
 			axios
 				.post("https://api.intra.42.fr/oauth/token", params)
@@ -157,7 +132,7 @@ function startApp(client) {
 		}
 	});
 
-	const httpsServer = https.createServer(credentials, app);
-	return httpsServer;
+	const httpServer = http.createServer(app);
+	return httpServer;
 }
 module.exports = { startApp };

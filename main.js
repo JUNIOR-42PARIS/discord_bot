@@ -34,10 +34,10 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
-const httpsServer = startApp(client);
+const httpServer = startApp(client);
 client.login(process.env.TOKEN);
 
 const port = 2424;
-httpsServer.listen(port, () => {
+httpServer.listen(port, () => {
 	console.log("Server running on port " + port);
 });
