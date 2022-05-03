@@ -36,7 +36,7 @@ function initAuth(discordUserId) {
 	const code = generateUniqueCode();
 	db.push({ code: code, id: discordUserId });
 	writeDB("./auth_server/users.json", db);
-	const url = "https://auth.damien-hubleur.tech?user_code=" + code;
+	const url = "https://auth.bde42.me?user_code=" + code;
 	return url;
 }
 function generateUniqueCode() {

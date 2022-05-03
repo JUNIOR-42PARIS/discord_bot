@@ -75,7 +75,7 @@ function startApp(client) {
 				);
 		else
 			res.redirect(
-				"https://api.intra.42.fr/oauth/authorize?client_id=85572e681d846e10b545098ab236aaa69d0b8c36cbc8b026a87e71d948045fe0&redirect_uri=https%3A%2F%2Fauth.damien-hubleur.tech%2F42result?user_code=" +
+				"https://api.intra.42.fr/oauth/authorize?client_id=85572e681d846e10b545098ab236aaa69d0b8c36cbc8b026a87e71d948045fe0&redirect_uri=https%3A%2F%2Fauth.bde42.me%2F42result?user_code=" +
 					user_code +
 					"&response_type=code"
 			);
@@ -108,7 +108,7 @@ function startApp(client) {
 				client_secret: process.env.CLIENT_SECRET,
 				code: code,
 				redirect_uri:
-					"https://auth.damien-hubleur.tech/42result?user_code=" + user_code,
+					"https://auth.bde42.me/42result?user_code=" + user_code,
 			};
 			axios
 				.post("https://api.intra.42.fr/oauth/token", params)
