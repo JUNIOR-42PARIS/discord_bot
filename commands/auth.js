@@ -11,6 +11,9 @@ module.exports = {
 		const data = new MessageEmbed().setColor("RANDOM");
 		const url = initAuth(interaction.member.user.id);
 
+		console.log(
+			`${interaction.user.username} [${interaction.user.id}] used /auth`
+		);
 		data
 			.setAuthor({
 				name: client.user.tag,
