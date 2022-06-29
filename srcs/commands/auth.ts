@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { readDB, writeDB } = require("../utils.js");
+import { MessageEmbed } from "discord.js";
+import { readDB, writeDB } from "../utils.js";
 
-module.exports = {
+export default {
 	data: {
 		name: "auth",
 		description: "Allows to authenticate with the api of 42",

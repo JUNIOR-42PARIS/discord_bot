@@ -1,11 +1,11 @@
 require("dotenv").config();
 
-const express = require("express");
-const axios = require("axios");
-const http = require("http");
+import express from "express";
+import axios from "axios";
+import http from "http";
 
-const { readDB, writeDB } = require("../utils.js");
-const { guildId } = require("../config.json");
+import { readDB, writeDB } from "../utils";
+import { guildId } from "../config.json";
 
 // Function that take the token and try to get user's informations from it
 async function getUserInformations(token, user_res, user_code, client) {
@@ -58,7 +58,7 @@ async function validateAuth(discordUserId, user, client) {
 	}
 }
 
-function startApp(client) {
+export function startApp(client) {
 	let app = express();
 
 	// The endpoint for the auth. Need to pass a unique code with /auth?user=XXX
@@ -135,4 +135,3 @@ function startApp(client) {
 	const httpServer = http.createServer(app);
 	return httpServer;
 }
-module.exports = { startApp };

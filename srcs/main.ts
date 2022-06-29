@@ -1,8 +1,8 @@
 require("dotenv").config();
 
-const fs = require("node:fs");
-const { Client, Collection, Intents } = require("discord.js");
-const { startApp } = require("./auth_server/server");
+import fs from "node:fs";
+import { Client, Collection, Intents } from "discord.js";
+import { startApp } from "./server";
 
 const client = new Client({
 	intents: [

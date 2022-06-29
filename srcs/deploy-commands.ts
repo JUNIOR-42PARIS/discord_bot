@@ -1,11 +1,11 @@
 require("dotenv").config();
 
-const fs = require("node:fs");
-const { REST } = require("@discordjs/rest");
-const { Routes } = require("discord-api-types/v9");
-const { clientId } = require("./config.json");
+import fs from "node:fs";
+import { REST } from "@discordjs/rest";
+import { Routes } from "discord-api-types/v9";
+import { clientId } from "./config.json";
 
-const deploy = (guildId) => {
+export function deployCommands(guildId) => {
 	const commands = [];
 	const commandFiles = fs
 		.readdirSync("./commands")
@@ -24,4 +24,4 @@ const deploy = (guildId) => {
 		.catch(console.error);
 };
 
-exports.deploy_commands = deploy;
+

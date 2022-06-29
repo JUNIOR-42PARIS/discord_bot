@@ -1,7 +1,7 @@
-const { deploy_commands } = require("../deploy-commands");
-const { restricted_guilds } = require("../config.json");
+import { deploy_commands } from "../deploy-commands";
+import { restricted_guilds } from "../config.json";
 
-module.exports = {
+export default {
 	name: "messageCreate",
 	async execute(msg) {
 		if (msg.author.bot) return;

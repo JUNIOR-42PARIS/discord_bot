@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const { stripIndents } = require("common-tags");
 
-module.exports = {
+export default {
 	data: {
 		name: "info",
 		description: "Informations about the BDE LLD",

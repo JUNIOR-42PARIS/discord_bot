@@ -6,7 +6,7 @@ const { readFileSync, writeFileSync } = require("node:fs");
 
 // const { addToStore } = require("./auth_server/server");
 
-module.exports = {
+export default {
 	getToken: async () => {
 		const headersList = {
 			Accept: "*/*",
