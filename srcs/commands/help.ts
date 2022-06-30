@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
 
 export default {
 	data: {
@@ -53,7 +53,7 @@ export default {
 
 			if (cmd.data.description) data.setDescription(cmd.data.description);
 			if (cmd.usage)
-				data.addField("Usage", prefix + cmd.name + " " + (cmd.usage || " "));
+				data.addField("Usage", cmd.name + " " + (cmd.usage || " "));
 			try {
 				interaction.reply({ embeds: [data] });
 			} catch (err) {

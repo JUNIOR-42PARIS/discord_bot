@@ -1,15 +1,18 @@
 import { MessageEmbed } from "discord.js";
-import { readDB, writeDB } from "../utils.js";
+import { users } from "..";
+import { Interaction, User } from "discord.js";
 
 export default {
 	data: {
 		name: "auth",
 		description: "Allows to authenticate with the api of 42",
 	},
-	async execute(interaction) {
+	async execute(interaction: any) {
 		const client = interaction.client;
+		if (!client.user || !interaction.member?.user.id || !interaction.guildId)
+			return;
 		const data = new MessageEmbed().setColor("RANDOM");
-		const url = initAuth(interaction.member.user.id);
+		const url = await initAuth(interaction.member.user.id, interaction.guildId);
 
 		console.log(
 			`${interaction.user.username} [${interaction.user.id}] used /auth`
@@ -17,9 +20,9 @@ export default {
 		data
 			.setAuthor({
 				name: client.user.tag,
-				iconURL: client.user.avatarURL(),
+				iconURL: client.user.avatarURL()!,
 			})
-			.setThumbnail(client.user.avatarURL())
+			.setThumbnail(client.user.avatarURL()!)
 			.setTitle("Authentifie toi !")
 			.setDescription(`Clique [ici](${url}) pour t'authentifier`)
 			.setFooter({
@@ -34,12 +37,13 @@ export default {
 	},
 };
 
-function initAuth(discordUserId) {
-	let db = readDB("./auth_server/users.json");
-	const code = generateUniqueCode();
-	db.push({ code: code, id: discordUserId });
-	writeDB("./auth_server/users.json", db);
-	const url = "https://auth.bde42.me?user_code=" + code;
+async function initAuth(uid: string, guid: string) {
+	// let db = readDB("./auth_server/users.json");
+	// const code = generateUniqueCode();
+	// db.push({ code: code, id: discordUserId });
+	// writeDB("./auth_server/users.json", db);
+	const user = await users.insertOne({ uid, guid });
+	const url = "https://auth.bde42.me?c=" + user.insertedId;
 	return url;
 }
 function generateUniqueCode() {

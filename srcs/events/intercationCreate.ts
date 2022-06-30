@@ -1,10 +1,12 @@
+import type { CommandInteraction } from "discord.js";
+import commands from "../commands";
+
 export default {
 	name: "interactionCreate",
-	async execute(interaction) {
-		const client = interaction.client;
+	async execute(interaction: CommandInteraction) {
 		if (!interaction.isCommand()) return;
 
-		const command = await client.commands.get(interaction.commandName);
+		const command = await commands.get(interaction.commandName);
 
 		if (!command) return;
 

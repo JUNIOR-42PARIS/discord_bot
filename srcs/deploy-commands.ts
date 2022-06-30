@@ -1,27 +1,18 @@
 require("dotenv").config();
 
-import fs from "node:fs";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
-import { clientId } from "./config.json";
+import { readEnv } from "./utils";
+import commands from "./commands";
 
-export function deployCommands(guildId) => {
-	const commands = [];
-	const commandFiles = fs
-		.readdirSync("./commands")
-		.filter((file) => file.endsWith(".js"));
+const appId = readEnv("DISCORD_APP_ID");
+const token = readEnv("DISCORD_BOT_TOKEN");
 
-	for (const file of commandFiles) {
-		const command = require(`./commands/${file}`);
-		commands.push(command.data);
-	}
+export async function deployCommands(guildId: string) {
+	const rest = new REST({ version: "9" }).setToken(token);
 
-	const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
-
-	rest
-		.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-		.then(() => console.log("Successfully registered application commands."))
-		.catch(console.error);
+	await rest.put(Routes.applicationGuildCommands(appId, guildId), { body: commands.map(value => value.data) })
+	console.log("Successfully registered application commands.")
 };
 
 

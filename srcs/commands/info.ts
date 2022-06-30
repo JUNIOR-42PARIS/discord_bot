@@ -26,7 +26,7 @@ export default {
 			)
 			.addField("Source code", "https://github.com/shocquen/lld_bot_discord")
 			.setFooter({ text: `</> with ❤ for LLD BDE 42 by Shocquen & Dhubleur` });
-		const guild = await client.guilds.fetch("953954460047147008");
+		const guild = await client.guilds.fetch("827959858027298836");
 		await guild.members.fetch();
 
 		const bde = await guild.roles.fetch("954023542138241084");
