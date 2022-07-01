@@ -1,9 +1,9 @@
-import type { Client } from "discord.js";
+import type { Client } from 'discord.js';
 
 export default {
-	name: "ready",
+	name: 'ready',
 	once: true,
-	execute(client: Client) {
+	execute(client: Client): void {
 		console.log(`${client.user?.username}'s up!`);
 	},
 };

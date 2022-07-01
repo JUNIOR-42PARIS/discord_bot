@@ -1,7 +1,7 @@
-import auth from "./auth";
-import help  from "./help";
-import info from "./info";
-import { Collection } from "discord.js";
+import auth from './auth';
+import help  from './help';
+import info from './info';
+import { Collection } from 'discord.js';
 
 const collection = new Collection<string, any>();
 
