@@ -2,13 +2,13 @@
 	"name": "j42_bot",
 	"version": "0.0.1",
 	"description": "Junior 42 Paris's fork of the LLD auth bot",
-	"main": "dist",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/JUNIOR-42PARIS/discord_bot"
 	},
 	"scripts": {
 		"build": "tsc -p .",
+		"build-production": "tsc -p tsconfig.prod.json",
 		"watch": "tsc -w -p .",
 		"start": "node dist",
 		"fmt": "eslint . --ext .ts --fix ",
