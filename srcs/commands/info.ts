@@ -1,12 +1,12 @@
 import type { CommandInteraction } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
-import { stripIndents } from 'common-tags';
 import assert from 'assert';
+import { commandFooter, sourceCode, infoTitle, infoDescription, infoCommandDescription } from '../dictionary.json';
 
 export default {
 	data: {
 		name: 'info',
-		description: 'Informations about the BDE LLD',
+		description: infoCommandDescription,
 	},
 	async execute(interaction: CommandInteraction): Promise<void> {
 		const data = new MessageEmbed();
@@ -23,15 +23,10 @@ export default {
 				name: user.tag,
 				iconURL,
 			})
-			.setTitle('La Liste Déchaînée')
-			.setDescription(
-				stripIndents`
-			La Liste Déchaînée a le plaisir de se présenter à vous en tant que BDE de l’école 42 Paris.
-			Animations, événements et bonne ambiance sont nos objectifs.
-		`
-			)
-			.addField('Source code', 'https://github.com/shocquen/lld_bot_discord')
-			.setFooter({ text: '</> with ❤ for LLD BDE 42 by Shocquen & Dhubleur' });
+			.setTitle(infoTitle)
+			.setDescription(infoDescription)
+			.addField('Source code', sourceCode)
+			.setFooter({ text: commandFooter });
 		// const guild = await client.guilds.fetch('827959858027298836');
 		// await guild.members.fetch();
 

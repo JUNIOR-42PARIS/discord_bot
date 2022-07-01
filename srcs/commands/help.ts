@@ -2,6 +2,7 @@ import { MessageEmbed } from 'discord.js';
 import type { CommandInteraction } from 'discord.js';
 import assert from 'assert';
 import commands from '.';
+import { commandFooter } from '../dictionary.json';
 
 export default {
 	data: {
@@ -36,7 +37,7 @@ export default {
 						`Hello, my name is ${user.username} !! 🖐`, 'Ask me `/help [command name]` to get infos about the command', '\n**Commands :**', commands.map(c => `\`/${c.data.name}\``).join('\n'),
 					].join('\n')
 				)
-				.setFooter({ text: '</> with ❤ for LLD BDE 42 by Shocquen and Dhubleur' });
+				.setFooter({ text: commandFooter });
 
 			try {
 				interaction.reply({ embeds: [data] });

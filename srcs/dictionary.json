@@ -1,0 +1,9 @@
+{
+    "commandFooter": "</> with ❤ for LLD BDE 42 by Shocquen & Dhubleur",
+    "sourceCode": "https://github.com/shocquen/lld_bot_discord",
+    "infoTitle": "La Liste Déchaînée",
+    "infoDescription": "La Liste Déchaînée a le plaisir de se présenter à vous en tant que BDE de l’école 42 Paris.\nAnimations, événements et bonne ambiance sont nos objectifs.",
+    "infoCommandDescription": "Informations about the BDE LLD",
+    "authCommandDescription": "Allows to authenticate with the api of 42",
+    "authCommandTitle": "Authentifie toi !"
+}

@@ -2,13 +2,14 @@ import { MessageEmbed } from 'discord.js';
 import { users } from '..';
 import type { CommandInteraction } from 'discord.js';
 import { readEnv } from '../utils';
+import { authCommandDescription, commandFooter, authCommandTitle } from '../dictionary.json';
 
 const redirect_uri = readEnv('SERVER_URL');
 
 export default {
 	data: {
 		name: 'auth',
-		description: 'Allows to authenticate with the api of 42',
+		description: authCommandDescription,
 	},
 	async execute(interaction: CommandInteraction): Promise<void> {
 		const client = interaction.client;
@@ -16,21 +17,20 @@ export default {
 			return;
 		const data = new MessageEmbed().setColor('RANDOM');
 		const url = await initAuth(interaction.member.user.id, interaction.guildId);
+		const iconURL = client.user.avatarURL() ?? undefined;
 
-		console.log(
-			`${interaction.user.username} [${interaction.user.id}] used /auth`
-		);
+		if (iconURL)
+			data.setThumbnail(iconURL);
+
+		console.log(`${interaction.user.username} [${interaction.user.id}] used /auth`);
 		data
 			.setAuthor({
 				name: client.user.tag,
-				iconURL: client.user.avatarURL()!,
+				iconURL,
 			})
-			.setThumbnail(client.user.avatarURL()!)
-			.setTitle('Authentifie toi !')
+			.setTitle(authCommandTitle)
 			.setDescription(`Clique [ici](${url}) pour t'authentifier`)
-			.setFooter({
-				text: '</> with ❤ for LLD BDE 42 by Shocquen and Dhubleur',
-			});
+			.setFooter({ text: commandFooter });
 
 		try {
 			interaction.reply({ embeds: [data], ephemeral: true });

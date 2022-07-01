@@ -52,9 +52,7 @@ export function startApp(client: Client): http.Server {
 		} else {
 			res
 				.status(400)
-				.send(
-					'Désolé, nous n\'avons pas pu récupérer ton code unique !'
-				);
+				.send('Désolé, nous n\'avons pas pu récupérer ton code unique !');
 		}
 	});
 
@@ -83,14 +81,12 @@ export function startApp(client: Client): http.Server {
 				client
 			);
 			console.log(`${login} logged in !`);
-			user_res.status(200).send(`Bienvenue ${login}, tu peux maintenant fermet cet onglet !`);
+			user_res.status(200).send(`Bienvenue ${login}, tu peux maintenant fermer cet onglet !`);
 		} catch (err: any) {
 			console.error(err);
 			user_res
 				.status(400)
-				.send(
-					'Désolé, nous n\'avons pas pu récupérer tes informations'
-				);
+				.send('Désolé, nous n\'avons pas pu récupérer tes informations');
 		}
 	});
 
