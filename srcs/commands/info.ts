@@ -15,7 +15,7 @@ export default {
 		const iconURL = user.avatarURL() ?? undefined;
 
 		if (iconURL)
-			data.setThumbnail(iconURL)
+			data.setThumbnail(iconURL);
 
 		data
 			.setColor('#ef8058')

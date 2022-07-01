@@ -10,7 +10,7 @@ import { ObjectId } from 'mongodb';
 const client42 = readEnv('42_CLIENT_ID');
 const secret42 = readEnv('42_SECRET');
 const roleId = readEnv('VERIFIED_ROLE');
-const url = readEnv('SERVER_URL');
+const redirect_uri = readEnv('SERVER_URL');
 
 // Function that take the token and try to get user's informations from it
 async function validateUser(access_token: string, user: SavedUser, client: Client): Promise<string> {
@@ -40,20 +40,22 @@ export function startApp(client: Client): http.Server {
 	// Use the XXX in the redirect uri
 	app.get('/', async function (req, res) {
 		const user_code = req.query.c;
-		const guild_id = req.query.g;
-		if (typeof user_code != 'string' || typeof guild_id != 'string')
-			return;
-		const user = await users.findOne(new ObjectId(user_code));
-		if (user)
-			res.redirect(
-				`https://api.intra.42.fr/oauth/authorize?client_id=${client42}&redirect_uri=https%3A%2F%2Fauth.bde42.me%2F42result?c=${user_code}&response_type=code`
-			);
-		else
+		if (typeof user_code != 'string')
+			throw new Error('Malformed request');
+		const user = await users.findOne({ _id: new ObjectId(user_code) });
+		if (user) {
+			const url = new URL('https://api.intra.42.fr/oauth/authorize');
+			url.searchParams.append('client_id', client42);
+			url.searchParams.append('redirect_uri', `${redirect_uri}/42result?c=${user_code}`);
+			url.searchParams.append('response_type', 'code');
+			res.redirect(url.toString());
+		} else {
 			res
 				.status(400)
 				.send(
-					'Désolé, nous n\'avons pas pu récupérer ton code unique ! https://s.42l.fr/results'
+					'Désolé, nous n\'avons pas pu récupérer ton code unique !'
 				);
+		}
 	});
 
 	// Then endpoint for the result of the auth. We exchange the code with a token and with it, we can access to the user's information
@@ -62,19 +64,17 @@ export function startApp(client: Client): http.Server {
 		try {
 			const code = req.query.code;
 			const user_code = req.query.c;
-			const guild_id = req.query.g;
-			if (req.query.error || typeof user_code != 'string' || typeof guild_id != 'string')
+			if (req.query.error || typeof user_code != 'string')
 				throw new Error('Malformed request');
-			const user = await users.findOneAndDelete(new ObjectId(user_code));
-			if (!user.ok || !user.value) {
+			const user = await users.findOneAndDelete({ _id: new ObjectId(user_code) });
+			if (!user.ok || !user.value)
 				throw new Error('Could not find user');
-			}
 			const params = {
 				grant_type: 'authorization_code',
 				client_id: client42,
 				client_secret: secret42,
 				code,
-				redirect_uri: `${url}/42result?user_code=${user_code}`,
+				redirect_uri: `${redirect_uri}/42result?c=${user_code}`,
 			};
 			const resp = await axios.post('https://api.intra.42.fr/oauth/token', params);
 			const login = await validateUser(
@@ -83,12 +83,13 @@ export function startApp(client: Client): http.Server {
 				client
 			);
 			console.log(`${login} logged in !`);
+			user_res.status(200).send(`Bienvenue ${login}, tu peux maintenant fermet cet onglet !`);
 		} catch (err: any) {
 			console.error(err);
 			user_res
 				.status(400)
 				.send(
-					'Désolé, nous n\'avons pas pu récupérer tes informations : https://s.42l.fr/results'
+					'Désolé, nous n\'avons pas pu récupérer tes informations'
 				);
 		}
 	});

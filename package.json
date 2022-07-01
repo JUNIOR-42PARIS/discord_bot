@@ -1,8 +1,8 @@
 {
-	"name": "lld",
-	"version": "1.0.0",
-	"description": "simple auth discord bot for 42 BDE",
-	"main": "main.js",
+	"name": "j42_bot",
+	"version": "0.0.1",
+	"description": "Junior 42 Paris's fork of the LLD auth bot",
+	"main": "dist",
 	"scripts": {
 		"build": "tsc -p .",
 		"watch": "tsc -w -p .",
@@ -10,7 +10,19 @@
 		"fmt": "eslint . --ext .ts --fix ",
 		"lint": "eslint . --ext .ts"
 	},
-	"author": "shocquen",
+	"author": {
+		"name": "Alexandre Seo",
+		"email": "pro@alexandre-seo.com",
+		"url": "https://github.com/DontBreakAlex"
+	},
+	"contributors": [
+		{ "name": "shocquen", "email": "shocquen@student.42.fr" },
+		{ "name": "dhubleur", "email": "dhubleur@student.42.fr" }
+	],
+	"maintainers": [{
+		"name": "Alexandre Seo",
+		"email": "pro@alexandre-seo.com"
+	}],
 	"license": "ISC",
 	"dependencies": {
 		"@discordjs/builders": "^0.12.0",

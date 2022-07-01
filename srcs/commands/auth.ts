@@ -1,6 +1,9 @@
 import { MessageEmbed } from 'discord.js';
 import { users } from '..';
 import type { CommandInteraction } from 'discord.js';
+import { readEnv } from '../utils';
+
+const redirect_uri = readEnv('SERVER_URL');
 
 export default {
 	data: {
@@ -39,6 +42,6 @@ export default {
 
 async function initAuth(uid: string, guid: string): Promise<string> {
 	const user = await users.insertOne({ uid, guid });
-	const url = 'https://auth.bde42.me?c=' + user.insertedId;
+	const url = `${redirect_uri}/?c=${user.insertedId}`;
 	return url;
 }

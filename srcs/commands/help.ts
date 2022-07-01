@@ -22,7 +22,7 @@ export default {
 		const iconURL = user.avatarURL() ?? undefined;
 
 		if (iconURL)
-			data.setThumbnail(iconURL)
+			data.setThumbnail(iconURL);
 		/* General help */
 		if (!interaction.options.getString('command')) {
 			data
