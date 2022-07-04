@@ -52,7 +52,7 @@ export function startApp(client: Client): http.Server {
 			res.redirect(url.toString());
 		} catch {
 			res
-				.status(404)
+				.status(400)
 				.send('Bad request');
 		}
 	});
