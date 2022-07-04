@@ -1,6 +1,6 @@
 {
 	"name": "j42_bot",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Junior 42 Paris's fork of the LLD auth bot",
 	"repository": {
 		"type": "git",
