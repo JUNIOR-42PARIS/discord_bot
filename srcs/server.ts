@@ -39,20 +39,21 @@ export function startApp(client: Client): http.Server {
 	// The endpoint for the auth. Need to pass a unique code with /auth?user=XXX
 	// Use the XXX in the redirect uri
 	app.get('/', async function (req, res) {
-		const user_code = req.query.c;
-		if (typeof user_code != 'string')
-			throw new Error('Malformed request');
-		const user = await users.findOne({ _id: new ObjectId(user_code) });
-		if (user) {
+		try {
+			const user_code = req.query.c;
+			if (typeof user_code != 'string')
+				throw new Error('Malformed request');
+			if (await users.countDocuments({ _id: new ObjectId(user_code) }) == 0)
+				throw new Error('Could not find user');
 			const url = new URL('https://api.intra.42.fr/oauth/authorize');
 			url.searchParams.append('client_id', client42);
 			url.searchParams.append('redirect_uri', `${redirect_uri}/42result?c=${user_code}`);
 			url.searchParams.append('response_type', 'code');
 			res.redirect(url.toString());
-		} else {
+		} catch {
 			res
-				.status(400)
-				.send('Désolé, nous n\'avons pas pu récupérer ton code unique !');
+				.status(404)
+				.send('Bad request');
 		}
 	});
 
