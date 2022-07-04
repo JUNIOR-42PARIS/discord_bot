@@ -7,8 +7,8 @@ import type { Client } from 'discord.js';
 import { SavedUser, users } from '.';
 import { ObjectId } from 'mongodb';
 
-const client42 = readEnv('42_CLIENT_ID');
-const secret42 = readEnv('42_SECRET');
+const client42 = readEnv('CLIENT_ID_42');
+const secret42 = readEnv('SECRET_42');
 const roleId = readEnv('VERIFIED_ROLE');
 const redirect_uri = readEnv('SERVER_URL');
 
