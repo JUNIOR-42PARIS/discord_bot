@@ -3,6 +3,15 @@ import { MessageEmbed } from 'discord.js';
 import assert from 'assert';
 import { commandFooter, sourceCode, infoTitle, infoDescription, infoCommandDescription } from '../dictionary.json';
 
+const ownerGuildId = process.env.INFO_GUILDID;
+const memberRoles: Record<string, string> | undefined = (() => {
+	if (process.env.MEMBER_ROLES_JSON) {
+		try {
+			return JSON.parse(process.env.MEMBER_ROLES_JSON)
+		} catch {}
+	}
+})();
+
 export default {
 	data: {
 		name: 'info',
@@ -27,28 +36,21 @@ export default {
 			.setDescription(infoDescription)
 			.addField('Source code', sourceCode)
 			.setFooter({ text: commandFooter });
-		// const guild = await client.guilds.fetch('827959858027298836');
-		// await guild.members.fetch();
+		if (ownerGuildId && memberRoles) {
+			const client = interaction.client;
+			const guild = await client.guilds.fetch(ownerGuildId);
+			await guild.members.fetch();
+			let alreadyAdded: string[] = [];
+			for (const [roleId, roleName] of Object.entries(memberRoles)) {
+				const role = await guild.roles.fetch(roleId);
+				if (!role)
+					continue;
+				const members = Array.from(role.members.filter((_, k) => !alreadyAdded.includes(k)).keys());
+				alreadyAdded.push(...members);
+				data.addField(roleName, members.join('\n'), false);
+			}
+		}
 
-		// const bde = await guild.roles.fetch('954023542138241084');
-		// const pre = await guild.roles.fetch('959393421846511636');
-		// const bureau = await guild.roles.fetch('963125932237922304');
-		// data.addFields([
-		// 	{
-		// 		name: 'Guide suprême',
-		// 		value: pre.members.map(m => m).join('\n'),
-		// 		inline: false,
-		// 	}, {
-		// 		name: 'Bureau',
-		// 		value: bureau.members.map(m => m).join('\n'),
-		// 		inline: true,
-		// 	}, {
-		// 		name: 'Membres',
-		// 		value: bde.members.map(m => m).join('\n'),
-		// 		inline: true,
-		// 	},
-		// ]);
-		// data.addField("Membres", bde.members.map((m) => m).join("\n"));
 		interaction.reply({ embeds: [data] });
 	},
 };
