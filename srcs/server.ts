@@ -6,6 +6,7 @@ import { readEnv } from './utils';
 import type { Client } from 'discord.js';
 import { SavedUser, users } from '.';
 import { ObjectId } from 'mongodb';
+import getRulesPage from './rules';
 
 const client42 = readEnv('CLIENT_ID_42');
 const secret42 = readEnv('SECRET_42');
@@ -25,11 +26,11 @@ async function validateUser(access_token: string, user: SavedUser, client: Clien
 	// const bocal = user["staff?"];
 	// const tuteur = user.groups.find((g) => g.id == 40);
 
-	await member.setNickname(`${resp.data.usual_first_name || resp.data.first_name} (${resp.data.login})`);
 	// if (bocal) await member.roles.add("960464782132142151");
 	// if (tuteur) await member.roles.add("960464388177940540");
 	await member.roles.add(roleId);
-
+	await member.setNickname(`${resp.data.usual_first_name || resp.data.first_name} (${resp.data.login})`);
+	
 	return resp.data.login as string;
 }
 
@@ -49,7 +50,7 @@ export function startApp(client: Client): http.Server {
 			url.searchParams.append('client_id', client42);
 			url.searchParams.append('redirect_uri', `${redirect_uri}/42result?c=${user_code}`);
 			url.searchParams.append('response_type', 'code');
-			res.redirect(url.toString());
+			res.send(getRulesPage(url.toString()));
 		} catch {
 			res
 				.status(400)
