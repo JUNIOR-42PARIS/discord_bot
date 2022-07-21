@@ -46,11 +46,7 @@ export function startApp(client: Client): http.Server {
 				throw new Error('Malformed request');
 			if (await users.countDocuments({ _id: new ObjectId(user_code) }) == 0)
 				throw new Error('Could not find user');
-			const url = new URL('https://api.intra.42.fr/oauth/authorize');
-			url.searchParams.append('client_id', client42);
-			url.searchParams.append('redirect_uri', `${redirect_uri}/42result?c=${user_code}`);
-			url.searchParams.append('response_type', 'code');
-			res.send(getRulesPage(url.toString()));
+			res.send(getRulesPage(`/verify?c=${user_code}`));
 		} catch {
 			res
 				.status(400)
@@ -91,6 +87,25 @@ export function startApp(client: Client): http.Server {
 				.send('Désolé, nous n\'avons pas pu récupérer tes informations');
 		}
 	});
+
+	app.get('/verify', async (req, res) => {
+		try {
+			const user_code = req.query.c;
+			if (typeof user_code != 'string')
+				throw new Error('Malformed request');
+			const user = await users.findOneAndDelete({ _id: new ObjectId(user_code) });
+			if (!user.ok || !user.value)
+				throw new Error('Could not find user');
+			const guild = await client.guilds.fetch(user.value.guid);
+			const member = await guild.members.fetch(user.value.uid);
+			await member.roles.add(roleId);
+			res.send("Tu peux fermer cet onglet !");
+		} catch {
+			res
+				.status(400)
+				.send('Bad request');
+		}
+	})
 
 	const httpServer = http.createServer(app);
 	return httpServer;
