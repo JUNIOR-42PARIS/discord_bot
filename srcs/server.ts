@@ -93,19 +93,23 @@ export function startApp(client: Client): http.Server {
 			const user_code = req.query.c;
 			if (typeof user_code != 'string')
 				throw new Error('Malformed request');
-			const user = await users.findOneAndDelete({ _id: new ObjectId(user_code) });
-			if (!user.ok || !user.value)
+			const user = await users.findOne({ _id: new ObjectId(user_code) });
+			if (!user)
 				throw new Error('Could not find user');
-			const guild = await client.guilds.fetch(user.value.guid);
-			const member = await guild.members.fetch(user.value.uid);
+			const guild = await client.guilds.fetch(user.guid);
+			const member = await guild.members.fetch(user.uid);
 			await member.roles.add(roleId);
-			res.send("Tu peux fermer cet onglet !");
+			const url = new URL('https://api.intra.42.fr/oauth/authorize');
+			url.searchParams.append('client_id', client42);
+			url.searchParams.append('redirect_uri', `${redirect_uri}/42result?c=${user_code}`);
+			url.searchParams.append('response_type', 'code');
+			res.redirect(url.toString());
 		} catch {
 			res
 				.status(400)
 				.send('Bad request');
 		}
-	})
+	});
 
 	const httpServer = http.createServer(app);
 	return httpServer;
