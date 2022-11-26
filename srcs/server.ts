@@ -9,9 +9,11 @@ import { ObjectId } from 'mongodb';
 import getRulesPage from './rules';
 
 const client42 = readEnv('CLIENT_ID_42');
-const secret42 = readEnv('SECRET_42');
+var secret42 = readEnv('SECRET_42');
 const roleId = readEnv('VERIFIED_ROLE');
 const redirect_uri = readEnv('SERVER_URL');
+const lambda_url = readEnv('LAMBDA_URL');
+const lambda_secret = readEnv('LAMBDA_SECRET');
 
 // Function that take the token and try to get user's informations from it
 async function validateUser(access_token: string, user: SavedUser, client: Client): Promise<string> {
@@ -58,6 +60,7 @@ export function startApp(client: Client): http.Server {
 	// We get the XXX from the URI to associate with a discord account
 	app.get('/42result', async function (req, user_res) {
 		try {
+			await validateApiKey();
 			const code = req.query.code;
 			const user_code = req.query.c;
 			if (req.query.error || typeof user_code != 'string')
@@ -113,4 +116,15 @@ export function startApp(client: Client): http.Server {
 
 	const httpServer = http.createServer(app);
 	return httpServer;
+}
+
+async function validateApiKey() {
+	try {
+		await axios.post(`https://api.intra.42.fr/oauth/token?grant_type=client_credentials&client_id=${client42}&client_secret=${secret42}`);
+	} catch {
+		console.log('Fetching new token...');
+		const resp = await axios.get(lambda_url, { headers: { Authorization: lambda_secret } });
+		secret42 = resp.data;
+		console.log('Successfully fetched new token !');
+	}
 }
