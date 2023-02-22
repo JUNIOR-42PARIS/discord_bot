@@ -81,6 +81,9 @@ export function startApp(client: Client): http.Server {
 				user.value,
 				client
 			);
+			const guild = await client.guilds.fetch(user.value.guid);
+			const member = await guild.members.fetch(user.value.uid);
+			await member.roles.add(roleId);
 			console.log(`${login} logged in !`);
 			user_res.status(200).send(`Bienvenue ${login}, tu peux maintenant fermer cet onglet !`);
 		} catch (err: any) {
@@ -99,9 +102,6 @@ export function startApp(client: Client): http.Server {
 			const user = await users.findOne({ _id: new ObjectId(user_code) });
 			if (!user)
 				throw new Error('Could not find user');
-			const guild = await client.guilds.fetch(user.guid);
-			const member = await guild.members.fetch(user.uid);
-			await member.roles.add(roleId);
 			const url = new URL('https://api.intra.42.fr/oauth/authorize');
 			url.searchParams.append('client_id', client42);
 			url.searchParams.append('redirect_uri', `${redirect_uri}/42result?c=${user_code}`);
